@@ -27,6 +27,16 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   }
 });
 
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.action === "disableInputFields") {
+    // Disable all input fields
+    const inputFields = document.querySelectorAll("input");
+    inputFields.forEach((input) => {
+      input.disabled = true;
+    });
+  }
+});
+
 function getBackgroundImages() {
   const backgroundImages = [];
   const elements = document.querySelectorAll("*");

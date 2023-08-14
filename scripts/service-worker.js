@@ -34,13 +34,19 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         title: "Unilorin Phishing Site Detected",
         message: `WARNING!!! This is a phishing site, do not enter your matriculation number and password if requested on this site! Do so at your own risk! Click here to go to the original web page ${unilorin}`,
         contextMessage: "University of Ilorin fake site detected!",
-        priority: 2, // Increase priority for a more noticeable notification
+        priority: 2,
         isClickable: true,
       };
       chrome.notifications.create(
         "unilorin-warning-notification",
         notificationOptions
       );
+
+      // Send a message to the content script to disable input fields
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        const activeTab = tabs[0];
+        chrome.tabs.sendMessage(activeTab.id, { action: "disableInputFields" });
+      });
     }
   }
 });
